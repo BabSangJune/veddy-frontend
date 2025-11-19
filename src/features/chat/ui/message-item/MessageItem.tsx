@@ -1,4 +1,3 @@
-// src/features/chat/ui/message-item/MessageItem.tsx
 import { memo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -25,56 +24,82 @@ export const MessageItem = memo(
                 )}
 
                 <div className={isUser ? styles.userBubble : styles.assistantBubble}>
+                    {/* ✅ 마크다운 렌더러 적용 */}
                     <div className={styles.content}>
                         {isUser ? (
-                            // 사용자 메시지 (마크다운 없음)
-                            <div style={{ whiteSpace: 'pre-wrap' }}>
-                                {message.content}
-                            </div>
+                            // 사용자 메시지는 그냥 텍스트
+                            message.content || (isStreaming ? '입력 중...' : '')
                         ) : (
-                            // AI 메시지 (마크다운 렌더링)
-                            <div style={{ whiteSpace: 'pre-wrap' }}>
-                                <ReactMarkdown
-                                    remarkPlugins={[remarkGfm]}
-                                    components={{
-                                        // ✅ p 태그: display block 유지, 줄바꿈 허용
-                                        p: ({ node, ...props }) => (
-                                            <p style={{ margin: 0, marginBottom: '8px', whiteSpace: 'pre-wrap' }} {...props} />
-                                        ),
-                                        h1: ({ node, ...props }) => (
-                                            <h1 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px', marginTop: '12px' }} {...props} />
-                                        ),
-                                        h2: ({ node, ...props }) => (
-                                            <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px', marginTop: '12px' }} {...props} />
-                                        ),
-                                        h3: ({ node, ...props }) => (
-                                            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px', marginTop: '10px' }} {...props} />
-                                        ),
-                                        strong: ({ node, ...props }) => (
-                                            <strong style={{ color: '#1976d2', fontWeight: 700 }} {...props} />
-                                        ),
-                                        a: ({ node, ...props }) => (
-                                            <a
-                                                style={{ color: '#1976d2', textDecoration: 'underline', wordBreak: 'break-all' }}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                {...props}
-                                            />
-                                        ),
-                                        ul: ({ node, ...props }) => (
-                                            <ul style={{ marginLeft: '20px', marginBottom: '8px' }} {...props} />
-                                        ),
-                                        ol: ({ node, ...props }) => (
-                                            <ol style={{ marginLeft: '20px', marginBottom: '8px' }} {...props} />
-                                        ),
-                                        li: ({ node, ...props }) => (
-                                            <li style={{ marginBottom: '4px' }} {...props} />
-                                        ),
-                                    }}
-                                >
-                                    {message.content}
-                                </ReactMarkdown>
-                            </div>
+                            // AI 메시지는 마크다운 렌더링
+                            <ReactMarkdown
+                                remarkPlugins={[remarkGfm]}
+                                components={{
+                                    // 단락
+                                    p: ({ node, ...props }) => (
+                                        <p className={styles.paragraph} {...props} />
+                                    ),
+
+                                    // 제목
+                                    h1: ({ node, ...props }) => (
+                                        <h1 className={styles.heading1} {...props} />
+                                    ),
+                                    h2: ({ node, ...props }) => (
+                                        <h2 className={styles.heading2} {...props} />
+                                    ),
+                                    h3: ({ node, ...props }) => (
+                                        <h3 className={styles.heading3} {...props} />
+                                    ),
+
+                                    // 강조
+                                    strong: ({ node, ...props }) => (
+                                        <strong className={styles.strong} {...props} />
+                                    ),
+                                    em: ({ node, ...props }) => (
+                                        <em className={styles.em} {...props} />
+                                    ),
+
+                                    // 코드
+                                    code: ({ node, inline, ...props }) => (
+                                        <code
+                                            className={inline ? styles.inlineCode : styles.codeBlock}
+                                            {...props}
+                                        />
+                                    ),
+
+                                    // 링크
+                                    a: ({ node, ...props }) => (
+                                        <a
+                                            className={styles.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            {...props}
+                                        />
+                                    ),
+
+                                    // 리스트
+                                    ul: ({ node, ...props }) => (
+                                        <ul className={styles.list} {...props} />
+                                    ),
+                                    ol: ({ node, ...props }) => (
+                                        <ol className={styles.orderedList} {...props} />
+                                    ),
+                                    li: ({ node, ...props }) => (
+                                        <li className={styles.listItem} {...props} />
+                                    ),
+
+                                    // 구분선
+                                    hr: ({ node, ...props }) => (
+                                        <hr className={styles.divider} {...props} />
+                                    ),
+
+                                    // 인용
+                                    blockquote: ({ node, ...props }) => (
+                                        <blockquote className={styles.blockquote} {...props} />
+                                    ),
+                                }}
+                            >
+                                {message.content || (isStreaming ? '입력 중...' : '')}
+                            </ReactMarkdown>
                         )}
                         {isStreaming && <span className={styles.cursor}>▊</span>}
                     </div>
