@@ -24,7 +24,6 @@ export const MessageItem = memo(
                 )}
 
                 <div className={isUser ? styles.userBubble : styles.assistantBubble}>
-                    {/* ✅ 마크다운 렌더러 적용 */}
                     <div className={styles.content}>
                         {isUser ? (
                             // 사용자 메시지는 그냥 텍스트
@@ -58,13 +57,18 @@ export const MessageItem = memo(
                                         <em className={styles.em} {...props} />
                                     ),
 
-                                    // 코드
-                                    code: ({ node, inline, ...props }) => (
-                                        <code
-                                            className={inline ? styles.inlineCode : styles.codeBlock}
-                                            {...props}
-                                        />
-                                    ),
+                                    // ✅ 코드 (타입 수정)
+                                    code: ({ node, inline, className, children, ...props }: any) => {
+                                        return inline ? (
+                                            <code className={styles.inlineCode} {...props}>
+                                                {children}
+                                            </code>
+                                        ) : (
+                                            <code className={styles.codeBlock} {...props}>
+                                                {children}
+                                            </code>
+                                        );
+                                    },
 
                                     // 링크
                                     a: ({ node, ...props }) => (
