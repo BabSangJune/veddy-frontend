@@ -1,6 +1,10 @@
+# .prettierignore
 node_modules
 dist
-.vite
-.env*
-*.lock
+build
 coverage
+.vite
+*.min.js
+*.min.css
+pnpm-lock.yaml
+package-lock.json
