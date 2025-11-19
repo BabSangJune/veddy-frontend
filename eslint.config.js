@@ -117,32 +117,32 @@ export default tseslint.config(
               position: 'before',
             },
             {
-              pattern: '@app/**',
+              pattern: '@/app/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@pages/**',
+              pattern: '@/pages/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@widgets/**',
+              pattern: '@/widgets/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@features/**',
+              pattern: '@/features/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@entities/**',
+              pattern: '@/entities/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@shared/**',
+              pattern: '@/shared/**',
               group: 'internal',
               position: 'after',
             },
