@@ -31,14 +31,14 @@ export const headerTitle = style({
 });
 
 export const avatarIcon = style({
-  width: '4.8rem',
-  height: '4.8rem',
+  width: '6.8rem',
+  height: '6.8rem',
   fontSize: '2.4rem',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   backgroundColor: colors.primary[100],
-  borderRadius: borderRadius.full,
+  // borderRadius: borderRadius.full,
 });
 
 export const title = style({

@@ -15,13 +15,17 @@ export const MessageItem = memo(
         const isStreaming = message.status === 'streaming';
         const isError = message.status === 'error';
 
-        return (
-            <div className={styles.container}>
-                {!isUser && (
-                    <div className={styles.avatar}>
-                        <span className={styles.avatarText}>베디</span>
-                    </div>
-                )}
+  return (
+    <div className={styles.container}>
+      {!isUser && (
+        <div className={styles.avatar}>
+          <img
+            src="/images/veddy-avatar.png"
+            alt="VEDDY"
+            className={styles.avatarImage}
+          />
+        </div>
+      )}
 
                 <div className={isUser ? styles.userBubble : styles.assistantBubble}>
                     <div className={styles.content}>

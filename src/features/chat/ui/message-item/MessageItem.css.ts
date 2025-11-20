@@ -14,20 +14,22 @@ export const container = style({
 });
 
 export const avatar = style({
-    width: '3.6rem',
-    height: '3.6rem',
-    borderRadius: borderRadius.full,
-    backgroundColor: colors.primary[100],
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
+  width: '4.2rem',
+  height: '4.2rem',
+  borderRadius: borderRadius.full,
+  backgroundColor: colors.primary[100],
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  overflow: 'hidden', // 이미지가 경계를 넘지 않도록
 });
 
-export const avatarText = style({
-    fontSize: fontSize.sm,
-    fontWeight: 600,
-    color: colors.primary[700],
+// 이미지 스타일 추가
+export const avatarImage = style({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover', // 비율 유지하며 컨테이너 꽉 채우기
 });
 
 export const userBubble = style({

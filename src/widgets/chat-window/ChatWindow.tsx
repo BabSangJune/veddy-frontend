@@ -18,9 +18,13 @@ export const ChatWindow = () => {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerTitle}>
-            <div className={styles.avatarIcon}>🤖</div>
+            <img
+              src="/images/veddy-slogan.png"
+              alt="VEDDY"
+              className={styles.avatarIcon}
+            />
             <div>
-              <h1 className={styles.title}>베디 (VEDDY)</h1>
+              <h1 className={styles.title}>베디 (VEDDY) - 너의 하루를 밝게!</h1>
               <p className={styles.subtitle}>Vessellink's Buddy</p>
             </div>
           </div>
