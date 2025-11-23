@@ -17,10 +17,12 @@ export const useChatStream = () => {
         setError,
     } = useChatStore();
 
+    // 🆕 tableMode 파라미터 추가
     const sendMessage = useCallback(
-        async (question: string) => {
+        async (question: string, tableMode: boolean = false) => {
             try {
                 console.log('[useChatStream] 메시지 전송:', question);
+                console.log('[useChatStream] 📊 표 모드:', tableMode); // 🆕 로깅
 
                 setError(null);
                 setLoading(true);
@@ -37,6 +39,7 @@ export const useChatStream = () => {
                     {
                         user_id: 'user-default',
                         query: question,
+                        table_mode: tableMode, // 🆕 표 모드 전달
                     },
                     (token) => {
                         // ✅ 각 토큰(문자) 누적

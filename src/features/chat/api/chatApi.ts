@@ -1,9 +1,11 @@
 // src/features/chat/api/chatApi.ts
 import type { SourceDocument } from '@/entities/message';
 
+// 🆕 table_mode 필드 추가
 export interface ChatRequest {
     user_id: string;
     query: string;
+    table_mode?: boolean; // 🆕 표 형식 답변 모드 (선택적)
 }
 
 const getApiBaseUrl = () => {
@@ -23,7 +25,12 @@ export const streamChat = async (
     onError: (error: Error) => void,
 ): Promise<void> => {
     const endpoint = `${API_BASE_URL}/chat/stream`;
-    console.log('[streamChat] 요청:', endpoint, request);
+
+    // 🆕 표 모드 로깅
+    console.log('[streamChat] 요청:', endpoint, {
+        ...request,
+        table_mode_enabled: request.table_mode ?? false,
+    });
 
     try {
         const response = await fetch(endpoint, {
@@ -31,7 +38,7 @@ export const streamChat = async (
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(request),
+            body: JSON.stringify(request), // 🆕 table_mode 자동 포함
         });
 
         console.log('[streamChat] 응답 상태:', response.status);
@@ -68,7 +75,7 @@ export const streamChat = async (
 
                     if (!event) continue;
 
-                    // ✅ 백엔드가  없이 보내는 경우 처리
+                    // ✅ 백엔드가 " " 없이 보내는 경우 처리
                     let jsonStr = event;
 
                     // " " 접두사가 있으면 제거
@@ -83,7 +90,10 @@ export const streamChat = async (
                     try {
                         const data = JSON.parse(jsonStr);
 
-                        console.log('[streamChat] 토큰:', data.type === 'token' ? data.token : data.type);
+                        // 🆕 표 모드일 때 특별 로깅 (디버깅용)
+                        if (request.table_mode && data.type === 'token' && data.token === '|') {
+                            console.log('[streamChat] 📊 표 구분자 감지');
+                        }
 
                         if (data.type === 'token') {
                             onToken(data.token);

@@ -268,3 +268,55 @@ export const sourceLink = style({
         },
     },
 });
+
+// 🆕 표 스타일
+export const tableWrapper = style({
+    overflowX: 'auto',
+    marginTop: '12px',
+    marginBottom: '12px',
+    borderRadius: '8px',
+    border: '1px solid #e5e7eb',
+});
+
+export const table = style({
+    width: '100%',
+    borderCollapse: 'collapse',
+    fontSize: '14px',
+    backgroundColor: '#fff',
+});
+
+export const tableHead = style({
+    backgroundColor: '#f9fafb',
+    borderBottom: '2px solid #e5e7eb',
+});
+
+export const tableBody = style({
+    backgroundColor: '#fff',
+});
+
+export const tableRow = style({
+    borderBottom: '1px solid #e5e7eb',
+    ':last-child': {
+        borderBottom: 'none',
+    },
+});
+
+export const tableHeader = style({
+    padding: '12px 16px',
+    textAlign: 'left',
+    fontWeight: 600,
+    color: '#111827',
+    borderRight: '1px solid #e5e7eb',
+    ':last-child': {
+        borderRight: 'none',
+    },
+});
+
+export const tableCell = style({
+    padding: '12px 16px',
+    color: '#374151',
+    borderRight: '1px solid #e5e7eb',
+    ':last-child': {
+        borderRight: 'none',
+    },
+});

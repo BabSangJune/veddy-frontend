@@ -1,6 +1,7 @@
+// src/features/chat/ui/message-item/MessageItem.tsx
 import { memo } from 'react';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import remarkGfm from 'remark-gfm'; // ✅ 이미 있음 (표 지원)
 import type { Message } from '@/entities/message';
 import { formatSourceTitle, formatSimilarity } from '@/entities/message';
 import * as styles from './MessageItem.css';
@@ -15,17 +16,17 @@ export const MessageItem = memo(
         const isStreaming = message.status === 'streaming';
         const isError = message.status === 'error';
 
-  return (
-    <div className={styles.container}>
-      {!isUser && (
-        <div className={styles.avatar}>
-          <img
-            src="/images/veddy-avatar.png"
-            alt="VEDDY"
-            className={styles.avatarImage}
-          />
-        </div>
-      )}
+        return (
+            <div className={styles.container}>
+                {!isUser && (
+                    <div className={styles.avatar}>
+                        <img
+                            src="/images/veddy-avatar.png"
+                            alt="VEDDY"
+                            className={styles.avatarImage}
+                        />
+                    </div>
+                )}
 
                 <div className={isUser ? styles.userBubble : styles.assistantBubble}>
                     <div className={styles.content}>
@@ -35,7 +36,7 @@ export const MessageItem = memo(
                         ) : (
                             // AI 메시지는 마크다운 렌더링
                             <ReactMarkdown
-                                remarkPlugins={[remarkGfm]}
+                                remarkPlugins={[remarkGfm]} // ✅ 표 지원 플러그인 (이미 적용됨)
                                 components={{
                                     // 단락
                                     p: ({ node, ...props }) => (
@@ -61,7 +62,7 @@ export const MessageItem = memo(
                                         <em className={styles.em} {...props} />
                                     ),
 
-                                    // ✅ 코드 (타입 수정)
+                                    // 코드
                                     code: ({ node, inline, className, children, ...props }: any) => {
                                         return inline ? (
                                             <code className={styles.inlineCode} {...props}>
@@ -93,6 +94,28 @@ export const MessageItem = memo(
                                     ),
                                     li: ({ node, ...props }) => (
                                         <li className={styles.listItem} {...props} />
+                                    ),
+
+                                    // 🆕 표 스타일 추가
+                                    table: ({ node, ...props }) => (
+                                        <div className={styles.tableWrapper}>
+                                            <table className={styles.table} {...props} />
+                                        </div>
+                                    ),
+                                    thead: ({ node, ...props }) => (
+                                        <thead className={styles.tableHead} {...props} />
+                                    ),
+                                    tbody: ({ node, ...props }) => (
+                                        <tbody className={styles.tableBody} {...props} />
+                                    ),
+                                    tr: ({ node, ...props }) => (
+                                        <tr className={styles.tableRow} {...props} />
+                                    ),
+                                    th: ({ node, ...props }) => (
+                                        <th className={styles.tableHeader} {...props} />
+                                    ),
+                                    td: ({ node, ...props }) => (
+                                        <td className={styles.tableCell} {...props} />
                                     ),
 
                                     // 구분선

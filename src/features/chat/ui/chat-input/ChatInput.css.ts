@@ -1,78 +1,91 @@
 // src/features/chat/ui/ChatInput/ChatInput.css.ts
 import { style } from '@vanilla-extract/css';
-import { colors, spacing, fontSize, borderRadius, transition } from '@/shared/config/styles';
 
 export const container = style({
-  display: 'flex',
-  gap: spacing[12],
-  padding: spacing[16],
-  borderTop: `0.1rem solid ${colors.veddy.border}`,
-  backgroundColor: colors.veddy.surface,
-  alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    padding: '16px',
+    borderTop: '1px solid #e5e7eb',
+    backgroundColor: '#fff',
+});
+
+// 🆕 옵션 바 스타일
+export const optionsBar = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    paddingBottom: '8px',
+});
+
+export const toggleLabel = style({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    cursor: 'pointer',
+    userSelect: 'none',
+    fontSize: '14px',
+    color: '#6b7280',
+    transition: 'color 0.2s',
+    ':hover': {
+        color: '#111827',
+    },
+});
+
+export const checkbox = style({
+    width: '16px',
+    height: '16px',
+    cursor: 'pointer',
+    accentColor: '#3b82f6',
+});
+
+export const toggleText = style({
+    fontSize: '14px',
+    fontWeight: 500,
+});
+
+// 🆕 입력 영역 래퍼
+export const inputWrapper = style({
+    display: 'flex',
+    gap: '8px',
+    alignItems: 'flex-end',
 });
 
 export const textarea = style({
-  flex: 1,
-  padding: spacing[12],
-  fontSize: fontSize.base,
-  fontFamily: 'inherit',
-  lineHeight: 1.5,
-  border: `0.1rem solid ${colors.veddy.inputBorder}`,
-  borderRadius: borderRadius.base,
-  resize: 'none',
-  minHeight: '4.4rem',
-  maxHeight: '20rem',
-  color: colors.neutral[900],
-  backgroundColor: colors.neutral[0],
-  transition: `all ${transition.normal}`,
-
-  selectors: {
-    '&::placeholder': {
-      color: colors.neutral[400],
+    flex: 1,
+    padding: '12px 16px',
+    border: '1px solid #e5e7eb',
+    borderRadius: '8px',
+    fontSize: '14px',
+    lineHeight: '1.5',
+    resize: 'none',
+    outline: 'none',
+    transition: 'border-color 0.2s',
+    ':focus': {
+        borderColor: '#3b82f6',
     },
-    '&:focus': {
-      outline: 'none',
-      borderColor: colors.veddy.inputFocus,
-      boxShadow: `0 0 0 0.3rem ${colors.primary[100]}`,
+    ':disabled': {
+        backgroundColor: '#f3f4f6',
+        cursor: 'not-allowed',
     },
-    '&:disabled': {
-      opacity: 0.5,
-      cursor: 'not-allowed',
-      backgroundColor: colors.neutral[50],
-    },
-  },
 });
 
 export const sendButton = style({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: spacing[12],
-  minWidth: '4.4rem',
-  minHeight: '4.4rem',
-  backgroundColor: colors.primary[500],
-  color: colors.neutral[0],
-  border: 'none',
-  borderRadius: borderRadius.base,
-  cursor: 'pointer',
-  transition: `all ${transition.normal}`,
-
-  selectors: {
-    '&:hover:not(:disabled)': {
-      backgroundColor: colors.primary[600],
-      transform: 'translateY(-0.2rem)',
+    padding: '12px 16px',
+    backgroundColor: '#3b82f6',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ':hover': {
+        backgroundColor: '#2563eb',
     },
-    '&:active:not(:disabled)': {
-      backgroundColor: colors.primary[700],
-      transform: 'translateY(0)',
+    ':disabled': {
+        backgroundColor: '#9ca3af',
+        cursor: 'not-allowed',
     },
-    '&:disabled': {
-      opacity: 0.5,
-      cursor: 'not-allowed',
-    },
-    '&:focus-visible': {
-      outline: `0.2rem solid ${colors.primary[500]}`,
-      outlineOffset: '0.2rem',
-    },
-  },
 });
