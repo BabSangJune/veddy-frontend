@@ -1,11 +1,20 @@
-// src/app/main.tsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryProvider } from './providers/QueryProvider';
 import App from './App.tsx';
-
-// 글로벌 스타일 import
+import { supabase } from '@/shared/lib/supabase';
 import '@/shared/config/styles/global.css.ts';
+
+// 🆕 Supabase Auth 변경 리스너
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log('[AUTH] Event:', event, 'Session:', session);
+
+  if (event === 'SIGNED_IN') {
+    console.log('[AUTH] ✅ 사용자 로그인 성공');
+  } else if (event === 'SIGNED_OUT') {
+    console.log('[AUTH] 🚪 사용자 로그아웃');
+  }
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,10 +1,7 @@
-// src/app/App.tsx
-// import { ChatPage } from '@/pages';
+import { AppRouter } from './router';
 
-import { ChatPage } from '@/pages';
-
-function App() {
-  return <ChatPage />;
+export function App() {
+  return <AppRouter />;
 }
 
 export default App;

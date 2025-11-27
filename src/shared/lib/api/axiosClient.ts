@@ -1,11 +1,12 @@
-// src/shared/lib/api/axios.ts
 import axios from 'axios';
+import { useAuthStore } from '@/entities/auth';
 
 /**
- * Axios 인스턴스 설정
+ * 일반 API용 Axios 클라이언트
+ * 자동으로 토큰을 추가하고 에러를 처리함
  */
-export const apiClient = axios.create({
-  baseURL: '/api',
+export const axiosClient = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -15,13 +16,13 @@ export const apiClient = axios.create({
 /**
  * 요청 인터셉터
  */
-apiClient.interceptors.request.use(
+axiosClient.interceptors.request.use(
   (config) => {
-    // 필요 시 인증 토큰 추가
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    // JWT 토큰 추가
+    const token = useAuthStore.getState().getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -32,9 +33,15 @@ apiClient.interceptors.request.use(
 /**
  * 응답 인터셉터
  */
-apiClient.interceptors.response.use(
+axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    // 토큰 만료 시 로그아웃 처리
+    if (error.response?.status === 401) {
+      useAuthStore.getState().logout();
+      window.location.href = '/login';
+    }
+
     // 에러 처리
     if (error.response) {
       // 서버 응답이 있는 경우
