@@ -36,7 +36,7 @@ export const StatusBar = () => {
         {/* 사용자 섹션 */}
         <div className={styles.userSection}>
           <span className={styles.email}>
-            {user?.email || user?.id || 'User'}
+            {user?.user_metadata?.email || user?.id || 'User'}
           </span>
           <button
             onClick={handleLogout}
