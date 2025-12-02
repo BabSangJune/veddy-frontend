@@ -5,6 +5,8 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -13,6 +15,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
 
     /* Linting */
     "strict": true,
@@ -20,10 +23,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    /* Case Sensitivity */
-    "forceConsistentCasingInFileNames": true,
-
-    /* Path Alias */
+    /* Path Aliases (FSD 구조) */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -35,9 +35,9 @@
       "@/shared/*": ["src/shared/*"]
     },
 
-    /* Vite Types */
+    /* Vite Client Types */
     "types": ["vite/client"]
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "vite-env.d.ts"],
+  "exclude": ["node_modules", "dist", "build"]
 }
