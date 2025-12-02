@@ -14,6 +14,17 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
+  // ✅ vite 파일 제외 (추가)
+  {
+    ignores: [
+      'dist',
+      'build',
+      'node_modules',
+      'vite.config.ts',
+      'vite.config.node.ts',
+    ],
+  },
+
   // 전역 설정
   {
     languageOptions: {

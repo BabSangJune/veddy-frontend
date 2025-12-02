@@ -1,4 +1,3 @@
-// vite.config.ts (수정된 부분만)
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
@@ -32,8 +31,8 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        // ✅ 수정: 환경변수 사용
-        target: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        // ✅ process.env 사용 (Node.js 환경)
+        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       },
