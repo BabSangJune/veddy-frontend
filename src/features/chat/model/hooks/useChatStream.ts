@@ -1,6 +1,7 @@
 // src/features/chat/model/hooks/useChatStream.ts
 import { useCallback } from 'react';
 
+import { useAuthStore } from '@/entities/auth'; // ✅ 추가
 import {
   completeMessage,
   createAssistantMessage,
@@ -14,12 +15,11 @@ import { useChatStore } from '../chatStore';
 export const useChatStream = () => {
   const { addMessage, updateLastMessage, setLoading, setError } = useChatStore();
 
-  // 🆕 tableMode 파라미터 추가
   const sendMessage = useCallback(
     async (question: string, tableMode: boolean = false) => {
       try {
         console.log('[useChatStream] 메시지 전송:', question);
-        console.log('[useChatStream] 📊 표 모드:', tableMode); // 🆕 로깅
+        console.log('[useChatStream] 📊 표 모드:', tableMode);
 
         setError(null);
         setLoading(true);
@@ -32,17 +32,18 @@ export const useChatStream = () => {
 
         let fullContent = '';
 
+        // ✅ 실제 user_id 가져오기
+        const currentUser = useAuthStore.getState().user;
+        const userId = currentUser?.id || currentUser?.email || 'anonymous';
+
         await streamChat(
           {
-            user_id: 'user-default',
+            user_id: userId, // ✅ 실제 user_id 사용
             query: question,
-            table_mode: tableMode, // 🆕 표 모드 전달
+            table_mode: tableMode,
           },
           (token) => {
-            // ✅ 각 토큰(문자) 누적
             fullContent += token;
-
-            // ✅ 상태 업데이트
             updateLastMessage((msg) => ({
               ...msg,
               content: fullContent,
@@ -51,11 +52,9 @@ export const useChatStream = () => {
           },
           (sources) => {
             console.log('[useChatStream] 완료, 출처:', sources);
-
             updateLastMessage((msg) =>
               completeMessage({ ...msg, content: fullContent, status: 'sent' as const }, sources),
             );
-
             setLoading(false);
           },
           (error) => {
