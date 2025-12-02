@@ -1,12 +1,14 @@
+// src/shared/lib/api/axiosClient.ts
 import axios from 'axios';
 import { useAuthStore } from '@/entities/auth';
+import { CONFIG } from '@/shared/config/environment';
 
 /**
  * 일반 API용 Axios 클라이언트
  * 자동으로 토큰을 추가하고 에러를 처리함
  */
 export const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: CONFIG.API_BASE_URL || '/api',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
