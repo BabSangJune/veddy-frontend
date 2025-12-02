@@ -14,7 +14,7 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
-  // ✅ vite 파일 제외 (추가)
+  // ✅ vite 파일 제외
   {
     ignores: [
       'dist',
@@ -27,10 +27,12 @@ export default tseslint.config(
 
   // 전역 설정
   {
+    // ✅ TypeScript 파서 명시
     languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: 'module',
+      parser: tseslint.parser,
       parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
         ecmaFeatures: {
           jsx: true,
         },
@@ -89,8 +91,8 @@ export default tseslint.config(
     },
     rules: {
       // React 규칙
-      'react/react-in-jsx-scope': 'off', // React 17+
-      'react/prop-types': 'off', // TypeScript 사용
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': [
@@ -114,12 +116,12 @@ export default tseslint.config(
         'error',
         {
           groups: [
-            'builtin',   // Node.js 내장 모듈
-            'external',  // npm 패키지
-            'internal',  // 절대 경로 import
-            'parent',    // 상위 디렉토리
-            'sibling',   // 같은 디렉토리
-            'index',     // index 파일
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
           ],
           pathGroups: [
             {
@@ -167,7 +169,7 @@ export default tseslint.config(
         },
       ],
 
-      // FSD 레이어 규칙 (boundaries 플러그인)
+      // FSD 레이어 규칙
       'boundaries/element-types': [
         'error',
         {

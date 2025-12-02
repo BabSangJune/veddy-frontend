@@ -1,3 +1,4 @@
+// src/features/chat/api/streamChat.ts
 import { streamClient } from '@/shared/lib/api';
 import { useAuthStore } from '@/entities/auth';
 import type { SourceDocument } from '@/entities/message';
@@ -7,16 +8,7 @@ export interface ChatRequest {
   table_mode?: boolean;
 }
 
-const getApiBaseUrl = () => {
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || '/api';
-  if (import.meta.env.DEV) {
-    console.log('[API] Base URL:', baseUrl);
-  }
-  return baseUrl;
-};
-
-const API_BASE_URL = getApiBaseUrl();
-
+// ✅ API_BASE_URL 제거 (streamClient가 이미 처리)
 export const streamChat = async (
   request: ChatRequest,
   onToken: (token: string) => void,
@@ -24,7 +16,9 @@ export const streamChat = async (
   onError: (error: Error) => void,
 ): Promise<void> => {
   const token = useAuthStore.getState().getToken();
-  const endpoint = `${API_BASE_URL}/chat/stream`;
+
+  // ✅ 간단히 '/chat/stream' 경로만 전달 (streamClient가 baseURL 붙임)
+  const endpoint = '/chat/stream';
 
   console.log('[streamChat] 요청:', endpoint, {
     ...request,
@@ -66,7 +60,6 @@ export const streamChat = async (
 
         buffer += decoder.decode(value, { stream: true });
 
-        // ✅ 이벤트 분리 (\n\n)
         let eventEndIndex: number;
 
         while ((eventEndIndex = buffer.indexOf('\n\n')) !== -1) {
@@ -75,7 +68,6 @@ export const streamChat = async (
 
           if (!event) continue;
 
-          // ✅ "data: " 접두사 처리
           let jsonStr = event;
           if (event.startsWith('data: ')) {
             jsonStr = event.slice(6).trim();
@@ -121,9 +113,9 @@ export const healthCheck = async (): Promise<{
   message?: string;
 }> => {
   const token = useAuthStore.getState().getToken();
-  const endpoint = `${API_BASE_URL}/health`;
 
-  const response = await streamClient(endpoint, {
+  // ✅ 간단히 '/health' 경로만 전달
+  const response = await streamClient('/health', {
     method: 'GET',
     token: token ?? undefined,
   });

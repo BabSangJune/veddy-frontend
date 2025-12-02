@@ -1,5 +1,4 @@
 // src/entities/message/model/types.ts
-
 /**
  * 메시지 역할
  */
