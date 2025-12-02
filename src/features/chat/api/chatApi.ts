@@ -1,9 +1,12 @@
 // src/features/chat/api/streamChat.ts
-import { streamClient } from '@/shared/lib/api';
+
 import { useAuthStore } from '@/entities/auth';
 import type { SourceDocument } from '@/entities/message';
 
+import { streamClient } from '@/shared/lib/api';
+
 export interface ChatRequest {
+  user_id?: string;
   query: string;
   table_mode?: boolean;
 }

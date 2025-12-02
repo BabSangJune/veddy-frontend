@@ -1,4 +1,5 @@
 import { globalStyle } from '@vanilla-extract/css';
+
 import { colors, fontSize } from './tokens.css';
 
 // ========== RESET CSS ==========
@@ -23,7 +24,8 @@ globalStyle('body', {
   margin: 0,
   padding: 0,
   fontSize: fontSize.base, // 1.6rem (16px)
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  fontFamily:
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   lineHeight: 1.5,
   color: colors.neutral[900],
   backgroundColor: colors.veddy.background,
@@ -173,7 +175,10 @@ globalStyle('::-webkit-scrollbar-thumb:hover', {
 });
 
 // ========== FOCUS STATES ==========
-globalStyle('button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible', {
-  outline: `2px solid ${colors.neutral[600]}`,
-  outlineOffset: '2px',
-});
+globalStyle(
+  'button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible',
+  {
+    outline: `2px solid ${colors.neutral[600]}`,
+    outlineOffset: '2px',
+  },
+);

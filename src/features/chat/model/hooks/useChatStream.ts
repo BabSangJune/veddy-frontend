@@ -1,86 +1,80 @@
 // src/features/chat/model/hooks/useChatStream.ts
 import { useCallback } from 'react';
+
 import {
-    createUserMessage,
-    createAssistantMessage,
-    completeMessage,
-    createErrorMessage,
+  completeMessage,
+  createAssistantMessage,
+  createErrorMessage,
+  createUserMessage,
 } from '@/entities/message';
+
 import { streamChat } from '../../api';
 import { useChatStore } from '../chatStore';
 
 export const useChatStream = () => {
-    const {
-        addMessage,
-        updateLastMessage,
-        setLoading,
-        setError,
-    } = useChatStore();
+  const { addMessage, updateLastMessage, setLoading, setError } = useChatStore();
 
-    // 🆕 tableMode 파라미터 추가
-    const sendMessage = useCallback(
-        async (question: string, tableMode: boolean = false) => {
-            try {
-                console.log('[useChatStream] 메시지 전송:', question);
-                console.log('[useChatStream] 📊 표 모드:', tableMode); // 🆕 로깅
+  // 🆕 tableMode 파라미터 추가
+  const sendMessage = useCallback(
+    async (question: string, tableMode: boolean = false) => {
+      try {
+        console.log('[useChatStream] 메시지 전송:', question);
+        console.log('[useChatStream] 📊 표 모드:', tableMode); // 🆕 로깅
 
-                setError(null);
-                setLoading(true);
+        setError(null);
+        setLoading(true);
 
-                const userMessage = createUserMessage(question);
-                addMessage(userMessage);
+        const userMessage = createUserMessage(question);
+        addMessage(userMessage);
 
-                const assistantMessage = createAssistantMessage('');
-                addMessage(assistantMessage);
+        const assistantMessage = createAssistantMessage('');
+        addMessage(assistantMessage);
 
-                let fullContent = '';
+        let fullContent = '';
 
-                await streamChat(
-                    {
-                        user_id: 'user-default',
-                        query: question,
-                        table_mode: tableMode, // 🆕 표 모드 전달
-                    },
-                    (token) => {
-                        // ✅ 각 토큰(문자) 누적
-                        fullContent += token;
+        await streamChat(
+          {
+            user_id: 'user-default',
+            query: question,
+            table_mode: tableMode, // 🆕 표 모드 전달
+          },
+          (token) => {
+            // ✅ 각 토큰(문자) 누적
+            fullContent += token;
 
-                        // ✅ 상태 업데이트
-                        updateLastMessage((msg) => ({
-                            ...msg,
-                            content: fullContent,
-                            status: 'streaming' as const,
-                        }));
-                    },
-                    (sources) => {
-                        console.log('[useChatStream] 완료, 출처:', sources);
+            // ✅ 상태 업데이트
+            updateLastMessage((msg) => ({
+              ...msg,
+              content: fullContent,
+              status: 'streaming' as const,
+            }));
+          },
+          (sources) => {
+            console.log('[useChatStream] 완료, 출처:', sources);
 
-                        updateLastMessage((msg) =>
-                            completeMessage(
-                                { ...msg, content: fullContent, status: 'sent' as const },
-                                sources
-                            )
-                        );
+            updateLastMessage((msg) =>
+              completeMessage({ ...msg, content: fullContent, status: 'sent' as const }, sources),
+            );
 
-                        setLoading(false);
-                    },
-                    (error) => {
-                        console.error('[useChatStream] 에러:', error);
-                        setError(error.message);
-                        updateLastMessage(() => createErrorMessage(error.message));
-                        setLoading(false);
-                    },
-                );
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                console.error('[useChatStream] Catch 에러:', error);
-                setError(errorMessage);
-                addMessage(createErrorMessage(errorMessage));
-                setLoading(false);
-            }
-        },
-        [addMessage, updateLastMessage, setLoading, setError],
-    );
+            setLoading(false);
+          },
+          (error) => {
+            console.error('[useChatStream] 에러:', error);
+            setError(error.message);
+            updateLastMessage(() => createErrorMessage(error.message));
+            setLoading(false);
+          },
+        );
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error('[useChatStream] Catch 에러:', error);
+        setError(errorMessage);
+        addMessage(createErrorMessage(errorMessage));
+        setLoading(false);
+      }
+    },
+    [addMessage, updateLastMessage, setLoading, setError],
+  );
 
-    return { sendMessage };
+  return { sendMessage };
 };

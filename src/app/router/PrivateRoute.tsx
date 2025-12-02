@@ -1,6 +1,8 @@
-import { Navigate } from 'react-router-dom';
-import { useAuthStore } from '@/entities/auth';
 import { useEffect, useState } from 'react';
+
+import { Navigate } from 'react-router-dom';
+
+import { useAuthStore } from '@/entities/auth';
 
 export const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, checkSession } = useAuthStore();

@@ -1,8 +1,11 @@
 // src/features/chat/ui/MessageList/MessageList.tsx
 import { useEffect, useRef } from 'react';
-import type { Message } from '@/entities/message';
-import * as styles from './MessageList.css';
+
 import { MessageItem } from '@/features/chat/ui/message-item';
+
+import type { Message } from '@/entities/message';
+
+import * as styles from './MessageList.css';
 
 interface MessageListProps {
   messages: Message[];
@@ -34,9 +37,7 @@ export const MessageList = ({ messages, isLoading }: MessageListProps) => {
           {messages.map((message) => (
             <MessageItem key={message.id} message={message} />
           ))}
-          {isLoading && (
-            <div className={styles.loadingIndicator}>베디가 생각 중입니다...</div>
-          )}
+          {isLoading && <div className={styles.loadingIndicator}>베디가 생각 중입니다...</div>}
         </div>
       )}
     </div>

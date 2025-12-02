@@ -1,6 +1,14 @@
 // src/widgets/chat-window/chatWindow.css.ts
 import { style } from '@vanilla-extract/css';
-import { colors, spacing, fontSize, fontWeight, borderRadius, shadow } from '@/shared/config/styles';
+
+import {
+  colors,
+  spacing,
+  fontSize,
+  fontWeight,
+  borderRadius,
+  shadow,
+} from '@/shared/config/styles';
 
 export const container = style({
   display: 'flex',

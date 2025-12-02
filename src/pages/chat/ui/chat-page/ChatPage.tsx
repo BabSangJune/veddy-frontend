@@ -1,5 +1,6 @@
 // src/pages/chat/ChatPage.tsx
 import { ChatWindow, StatusBar } from '@/widgets';
+
 import * as styles from './ChatPage.css.ts';
 
 export const ChatPage = () => {

@@ -1,9 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/shared/lib/supabase';
-import { useAuthStore } from '@/entities/auth';
-import { LoginPage } from '@/pages/login';
+
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
 import { ChatPage } from '@/pages/chat';
+import { LoginPage } from '@/pages/login';
+
+import { useAuthStore } from '@/entities/auth';
+
+import { supabase } from '@/shared/lib/supabase';
+
 import { PrivateRoute } from './PrivateRoute';
 
 // 🆕 인증 콜백 핸들러 (수정)
@@ -60,18 +65,10 @@ const AuthCallback = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', marginTop: '50px' }}>
-        🔐 인증 처리 중...
-      </div>
-    );
+    return <div style={{ textAlign: 'center', marginTop: '50px' }}>🔐 인증 처리 중...</div>;
   }
 
-  return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      인증 처리 중...
-    </div>
-  );
+  return <div style={{ textAlign: 'center', marginTop: '50px' }}>인증 처리 중...</div>;
 };
 
 export const AppRouter = () => (

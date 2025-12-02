@@ -1,6 +1,7 @@
 // src/features/chat/model/chatStore.ts
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+
 import type { Message } from '@/entities/message';
 
 interface ChatState {
@@ -55,7 +56,10 @@ export const useChatStore = create<ChatState>()(
 
           // ✅ 내용이 실제로 변경되었을 때만 업데이트
           if (oldContent !== messages[lastIndex].content) {
-            console.log('[Store] 메시지 업데이트:', messages[lastIndex].content.substring(0, 30) + '...');
+            console.log(
+              '[Store] 메시지 업데이트:',
+              messages[lastIndex].content.substring(0, 30) + '...',
+            );
           }
 
           return { messages };
@@ -66,8 +70,7 @@ export const useChatStore = create<ChatState>()(
           currentStreamingContent: state.currentStreamingContent + token,
         })),
 
-      setCurrentStreamingContent: (content) =>
-        set({ currentStreamingContent: content }),
+      setCurrentStreamingContent: (content) => set({ currentStreamingContent: content }),
 
       setLoading: (loading) => {
         console.log('[Store] 로딩:', loading);

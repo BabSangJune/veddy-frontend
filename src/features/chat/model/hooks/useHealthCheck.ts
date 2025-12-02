@@ -1,5 +1,6 @@
 // src/features/chat/model/hooks/useHealthCheck.ts
 import { useQuery } from '@tanstack/react-query';
+
 import { healthCheck } from '../../api';
 
 /**

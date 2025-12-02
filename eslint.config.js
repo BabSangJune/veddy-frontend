@@ -1,4 +1,3 @@
-// eslint.config.js
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
@@ -10,11 +9,9 @@ import importPlugin from 'eslint-plugin-import';
 import boundaries from 'eslint-plugin-boundaries';
 
 export default tseslint.config(
-  // 기본 설정
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
-  // ✅ vite 파일 제외
   {
     ignores: [
       'dist',
@@ -22,25 +19,25 @@ export default tseslint.config(
       'node_modules',
       'vite.config.ts',
       'vite.config.node.ts',
+      '*.config.js', // ✅ 추가: 모든 설정 파일 제외
+      'eslint.config.js', // ✅ 명시적으로 추가
     ],
   },
 
-  // 전역 설정
   {
-    // ✅ TypeScript 파서 명시
+    files: ['**/*.{ts,tsx}'], // ✅ .js, .jsx 제거 - TypeScript 파일만 대상
     languageOptions: {
-      parser: tseslint.parser,
+      ecmaVersion: 2020,
+      sourceType: 'module',
       parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
+        project: './tsconfig.json', // ✅ TypeScript 파일에만 적용
       },
     },
     settings: {
-      react: {
-        version: 'detect',
+      react: { version: 'detect' },
+      'import/parsers': {
+        '@typescript-eslint/parser': ['.ts', '.tsx'], // ✅ 추가
       },
       'import/resolver': {
         typescript: {
@@ -48,39 +45,15 @@ export default tseslint.config(
           project: './tsconfig.json',
         },
       },
-      // FSD 구조 정의
       'boundaries/elements': [
-        {
-          type: 'app',
-          pattern: 'src/app/*',
-        },
-        {
-          type: 'pages',
-          pattern: 'src/pages/*',
-        },
-        {
-          type: 'widgets',
-          pattern: 'src/widgets/*',
-        },
-        {
-          type: 'features',
-          pattern: 'src/features/*',
-        },
-        {
-          type: 'entities',
-          pattern: 'src/entities/*',
-        },
-        {
-          type: 'shared',
-          pattern: 'src/shared/*',
-        },
+        { type: 'app', pattern: 'src/app/*' },
+        { type: 'pages', pattern: 'src/pages/*' },
+        { type: 'widgets', pattern: 'src/widgets/*' },
+        { type: 'features', pattern: 'src/features/*' },
+        { type: 'entities', pattern: 'src/entities/*' },
+        { type: 'shared', pattern: 'src/shared/*' },
       ],
     },
-  },
-
-  // src 폴더 규칙
-  {
-    files: ['src/**/*.{ts,tsx}'],
     plugins: {
       react,
       'react-hooks': reactHooks,
@@ -90,129 +63,55 @@ export default tseslint.config(
       boundaries,
     },
     rules: {
-      // React 규칙
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-
-      // TypeScript 규칙
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-        },
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-
-      // Import 정렬 (FSD 기반)
       'import/order': [
         'error',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
           pathGroups: [
-            {
-              pattern: 'react',
-              group: 'external',
-              position: 'before',
-            },
-            {
-              pattern: '@/app/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/pages/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/widgets/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/features/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/entities/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/shared/**',
-              group: 'internal',
-              position: 'after',
-            },
+            { pattern: 'react', group: 'external', position: 'before' },
+            { pattern: '@/app/**', group: 'internal', position: 'after' },
+            { pattern: '@/pages/**', group: 'internal', position: 'after' },
+            { pattern: '@/widgets/**', group: 'internal', position: 'after' },
+            { pattern: '@/features/**', group: 'internal', position: 'after' },
+            { pattern: '@/entities/**', group: 'internal', position: 'after' },
+            { pattern: '@/shared/**', group: 'internal', position: 'after' },
           ],
           pathGroupsExcludedImportTypes: ['react'],
           'newlines-between': 'always',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
+          alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-
-      // FSD 레이어 규칙
       'boundaries/element-types': [
         'error',
         {
           default: 'disallow',
           rules: [
-            {
-              from: 'app',
-              allow: ['pages', 'widgets', 'features', 'entities', 'shared'],
-            },
-            {
-              from: 'pages',
-              allow: ['widgets', 'features', 'entities', 'shared'],
-            },
-            {
-              from: 'widgets',
-              allow: ['features', 'entities', 'shared'],
-            },
-            {
-              from: 'features',
-              allow: ['entities', 'shared'],
-            },
-            {
-              from: 'entities',
-              allow: ['shared'],
-            },
-            {
-              from: 'shared',
-              allow: ['shared'],
-            },
+            { from: 'app', allow: ['pages', 'widgets', 'features', 'entities', 'shared'] },
+            { from: 'pages', allow: ['widgets', 'features', 'entities', 'shared'] },
+            { from: 'widgets', allow: ['features', 'entities', 'shared'] },
+            { from: 'features', allow: ['entities', 'shared'] },
+            { from: 'entities', allow: ['shared'] },
+            { from: 'shared', allow: ['shared'] },
           ],
         },
       ],
-
-      // Prettier 통합
       'prettier/prettier': 'error',
-
-      // 기타 규칙
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',
       'no-var': 'error',
     },
   },
 
-  // Prettier와 충돌 방지
   prettierConfig,
 );

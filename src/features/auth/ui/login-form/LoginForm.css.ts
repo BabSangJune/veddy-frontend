@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+
 import { colors, fontSize } from '@/shared/config/styles/tokens.css';
 
 export const container = style({

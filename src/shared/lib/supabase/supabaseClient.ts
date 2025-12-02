@@ -1,5 +1,6 @@
 // src/shared/lib/supabase/supabaseClient.ts
 import { createClient } from '@supabase/supabase-js';
+
 import { CONFIG } from '@/shared/config/environment';
 
 const supabaseUrl = CONFIG.SUPABASE_URL;

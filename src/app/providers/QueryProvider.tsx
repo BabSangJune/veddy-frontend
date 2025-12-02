@@ -1,7 +1,8 @@
 // src/app/providers/QueryProvider.tsx
+import { ReactNode } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ReactNode } from 'react';
 
 /**
  * QueryClient 설정

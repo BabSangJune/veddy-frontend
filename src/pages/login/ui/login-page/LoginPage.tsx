@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/entities/auth';
+
 import { LoginForm } from '@/features/auth/ui/login-form';
+
+import { useAuthStore } from '@/entities/auth';
+
 import * as styles from './LoginPage.css';
 
 export const LoginPage = () => {
@@ -26,11 +30,7 @@ export const LoginPage = () => {
 
   return (
     <div className={styles.container}>
-      {error && (
-        <div className={styles.errorMessage}>
-          에러: {error}
-        </div>
-      )}
+      {error && <div className={styles.errorMessage}>에러: {error}</div>}
       <LoginForm />
     </div>
   );

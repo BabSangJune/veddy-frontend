@@ -20,19 +20,12 @@ export const CONFIG = {
  * 환경변수 검증
  */
 const validateConfig = () => {
-  const required = [
-    'SUPABASE_URL',
-    'SUPABASE_ANON_KEY',
-  ] as const;
+  const required = ['SUPABASE_URL', 'SUPABASE_ANON_KEY'] as const;
 
-  const missing = required.filter(
-    (key) => !CONFIG[key as keyof typeof CONFIG]
-  );
+  const missing = required.filter((key) => !CONFIG[key as keyof typeof CONFIG]);
 
   if (missing.length > 0) {
-    console.warn(
-      `⚠️ 누락된 환경변수: ${missing.join(', ')}\n.env 파일을 확인하세요.`
-    );
+    console.warn(`⚠️ 누락된 환경변수: ${missing.join(', ')}\n.env 파일을 확인하세요.`);
   }
 };
 

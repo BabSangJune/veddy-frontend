@@ -1,5 +1,6 @@
 // src/widgets/chat-window/ChatWindow.tsx
 import { useChatStore, useChatStream, ChatInput, MessageList } from '@/features/chat';
+
 import * as styles from './ChatWindow.css.ts';
 
 export const ChatWindow = () => {
@@ -18,11 +19,7 @@ export const ChatWindow = () => {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.headerTitle}>
-            <img
-              src="/images/veddy-slogan.png"
-              alt="VEDDY"
-              className={styles.avatarIcon}
-            />
+            <img src="/images/veddy-slogan.png" alt="VEDDY" className={styles.avatarIcon} />
             <div>
               <h1 className={styles.title}>베디 (VEDDY) - 너의 하루를 밝게!</h1>
               <p className={styles.subtitle}>Vessellink's Buddy</p>

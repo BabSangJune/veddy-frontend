@@ -1,187 +1,151 @@
 // src/features/chat/ui/message-item/MessageItem.tsx
 import { memo } from 'react';
+
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'; // ✅ 이미 있음 (표 지원)
+
 import type { Message } from '@/entities/message';
 import { formatSourceTitle, formatSimilarity } from '@/entities/message';
+
 import * as styles from './MessageItem.css';
 
 interface MessageItemProps {
-    message: Message;
+  message: Message;
 }
 
 export const MessageItem = memo(
-    ({ message }: MessageItemProps) => {
-        const isUser = message.role === 'user';
-        const isStreaming = message.status === 'streaming';
-        const isError = message.status === 'error';
+  ({ message }: MessageItemProps) => {
+    const isUser = message.role === 'user';
+    const isStreaming = message.status === 'streaming';
+    const isError = message.status === 'error';
 
-        return (
-            <div className={styles.container}>
-                {!isUser && (
-                    <div className={styles.avatar}>
-                        <img
-                            src="/images/veddy-avatar.png"
-                            alt="VEDDY"
-                            className={styles.avatarImage}
-                        />
+    return (
+      <div className={styles.container}>
+        {!isUser && (
+          <div className={styles.avatar}>
+            <img src="/images/veddy-avatar.png" alt="VEDDY" className={styles.avatarImage} />
+          </div>
+        )}
+
+        <div className={isUser ? styles.userBubble : styles.assistantBubble}>
+          <div className={styles.content}>
+            {isUser ? (
+              // 사용자 메시지는 그냥 텍스트
+              message.content || (isStreaming ? '입력 중...' : '')
+            ) : (
+              // AI 메시지는 마크다운 렌더링
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]} // ✅ 표 지원 플러그인 (이미 적용됨)
+                components={{
+                  // 단락
+                  p: ({ node, ...props }) => <p className={styles.paragraph} {...props} />,
+
+                  // 제목
+                  h1: ({ node, ...props }) => <h1 className={styles.heading1} {...props} />,
+                  h2: ({ node, ...props }) => <h2 className={styles.heading2} {...props} />,
+                  h3: ({ node, ...props }) => <h3 className={styles.heading3} {...props} />,
+
+                  // 강조
+                  strong: ({ node, ...props }) => <strong className={styles.strong} {...props} />,
+                  em: ({ node, ...props }) => <em className={styles.em} {...props} />,
+
+                  // 코드
+                  code: ({ node, inline, className, children, ...props }: any) => {
+                    return inline ? (
+                      <code className={styles.inlineCode} {...props}>
+                        {children}
+                      </code>
+                    ) : (
+                      <code className={styles.codeBlock} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+
+                  // 링크
+                  a: ({ node, ...props }) => (
+                    <a
+                      className={styles.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      {...props}
+                    />
+                  ),
+
+                  // 리스트
+                  ul: ({ node, ...props }) => <ul className={styles.list} {...props} />,
+                  ol: ({ node, ...props }) => <ol className={styles.orderedList} {...props} />,
+                  li: ({ node, ...props }) => <li className={styles.listItem} {...props} />,
+
+                  // 🆕 표 스타일 추가
+                  table: ({ node, ...props }) => (
+                    <div className={styles.tableWrapper}>
+                      <table className={styles.table} {...props} />
                     </div>
-                )}
+                  ),
+                  thead: ({ node, ...props }) => <thead className={styles.tableHead} {...props} />,
+                  tbody: ({ node, ...props }) => <tbody className={styles.tableBody} {...props} />,
+                  tr: ({ node, ...props }) => <tr className={styles.tableRow} {...props} />,
+                  th: ({ node, ...props }) => <th className={styles.tableHeader} {...props} />,
+                  td: ({ node, ...props }) => <td className={styles.tableCell} {...props} />,
 
-                <div className={isUser ? styles.userBubble : styles.assistantBubble}>
-                    <div className={styles.content}>
-                        {isUser ? (
-                            // 사용자 메시지는 그냥 텍스트
-                            message.content || (isStreaming ? '입력 중...' : '')
-                        ) : (
-                            // AI 메시지는 마크다운 렌더링
-                            <ReactMarkdown
-                                remarkPlugins={[remarkGfm]} // ✅ 표 지원 플러그인 (이미 적용됨)
-                                components={{
-                                    // 단락
-                                    p: ({ node, ...props }) => (
-                                        <p className={styles.paragraph} {...props} />
-                                    ),
+                  // 구분선
+                  hr: ({ node, ...props }) => <hr className={styles.divider} {...props} />,
 
-                                    // 제목
-                                    h1: ({ node, ...props }) => (
-                                        <h1 className={styles.heading1} {...props} />
-                                    ),
-                                    h2: ({ node, ...props }) => (
-                                        <h2 className={styles.heading2} {...props} />
-                                    ),
-                                    h3: ({ node, ...props }) => (
-                                        <h3 className={styles.heading3} {...props} />
-                                    ),
+                  // 인용
+                  blockquote: ({ node, ...props }) => (
+                    <blockquote className={styles.blockquote} {...props} />
+                  ),
+                }}
+              >
+                {message.content || (isStreaming ? '입력 중...' : '')}
+              </ReactMarkdown>
+            )}
+            {isStreaming && <span className={styles.cursor}>▊</span>}
+          </div>
 
-                                    // 강조
-                                    strong: ({ node, ...props }) => (
-                                        <strong className={styles.strong} {...props} />
-                                    ),
-                                    em: ({ node, ...props }) => (
-                                        <em className={styles.em} {...props} />
-                                    ),
+          <div className={styles.timestamp}>
+            {message.timestamp.toLocaleTimeString('ko-KR', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </div>
 
-                                    // 코드
-                                    code: ({ node, inline, className, children, ...props }: any) => {
-                                        return inline ? (
-                                            <code className={styles.inlineCode} {...props}>
-                                                {children}
-                                            </code>
-                                        ) : (
-                                            <code className={styles.codeBlock} {...props}>
-                                                {children}
-                                            </code>
-                                        );
-                                    },
+          {isError && message.error && <div className={styles.error}>⚠️ {message.error}</div>}
 
-                                    // 링크
-                                    a: ({ node, ...props }) => (
-                                        <a
-                                            className={styles.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            {...props}
-                                        />
-                                    ),
-
-                                    // 리스트
-                                    ul: ({ node, ...props }) => (
-                                        <ul className={styles.list} {...props} />
-                                    ),
-                                    ol: ({ node, ...props }) => (
-                                        <ol className={styles.orderedList} {...props} />
-                                    ),
-                                    li: ({ node, ...props }) => (
-                                        <li className={styles.listItem} {...props} />
-                                    ),
-
-                                    // 🆕 표 스타일 추가
-                                    table: ({ node, ...props }) => (
-                                        <div className={styles.tableWrapper}>
-                                            <table className={styles.table} {...props} />
-                                        </div>
-                                    ),
-                                    thead: ({ node, ...props }) => (
-                                        <thead className={styles.tableHead} {...props} />
-                                    ),
-                                    tbody: ({ node, ...props }) => (
-                                        <tbody className={styles.tableBody} {...props} />
-                                    ),
-                                    tr: ({ node, ...props }) => (
-                                        <tr className={styles.tableRow} {...props} />
-                                    ),
-                                    th: ({ node, ...props }) => (
-                                        <th className={styles.tableHeader} {...props} />
-                                    ),
-                                    td: ({ node, ...props }) => (
-                                        <td className={styles.tableCell} {...props} />
-                                    ),
-
-                                    // 구분선
-                                    hr: ({ node, ...props }) => (
-                                        <hr className={styles.divider} {...props} />
-                                    ),
-
-                                    // 인용
-                                    blockquote: ({ node, ...props }) => (
-                                        <blockquote className={styles.blockquote} {...props} />
-                                    ),
-                                }}
-                            >
-                                {message.content || (isStreaming ? '입력 중...' : '')}
-                            </ReactMarkdown>
-                        )}
-                        {isStreaming && <span className={styles.cursor}>▊</span>}
-                    </div>
-
-                    <div className={styles.timestamp}>
-                        {message.timestamp.toLocaleTimeString('ko-KR', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                        })}
-                    </div>
-
-                    {isError && message.error && (
-                        <div className={styles.error}>⚠️ {message.error}</div>
-                    )}
-
-                    {message.sources && message.sources.length > 0 && (
-                        <div className={styles.sources}>
-                            <div className={styles.sourcesTitle}>📚 참고 문서</div>
-                            {message.sources.map((source) => (
-                                <div key={source.id} className={styles.sourceItem}>
-                                    <div className={styles.sourceTitle}>
-                                        {formatSourceTitle(source)}
-                                    </div>
-                                    <div className={styles.sourceMeta}>
-                                        유사도: {formatSimilarity(source.similarity)} | 출처:{' '}
-                                        {source.metadata?.source}
-                                    </div>
-                                    {source.metadata?.url && (
-                                        <a
-                                            href={source.metadata.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={styles.sourceLink}
-                                        >
-                                            문서 보기 →
-                                        </a>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+          {message.sources && message.sources.length > 0 && (
+            <div className={styles.sources}>
+              <div className={styles.sourcesTitle}>📚 참고 문서</div>
+              {message.sources.map((source) => (
+                <div key={source.id} className={styles.sourceItem}>
+                  <div className={styles.sourceTitle}>{formatSourceTitle(source)}</div>
+                  <div className={styles.sourceMeta}>
+                    유사도: {formatSimilarity(source.similarity)} | 출처: {source.metadata?.source}
+                  </div>
+                  {source.metadata?.url && (
+                    <a
+                      href={source.metadata.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.sourceLink}
+                    >
+                      문서 보기 →
+                    </a>
+                  )}
                 </div>
+              ))}
             </div>
-        );
-    },
-    (prevProps, nextProps) => {
-        return (
-            prevProps.message.content === nextProps.message.content &&
-            prevProps.message.status === nextProps.message.status
-        );
-    }
+          )}
+        </div>
+      </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.message.content === nextProps.message.content &&
+      prevProps.message.status === nextProps.message.status
+    );
+  },
 );
 
 MessageItem.displayName = 'MessageItem';

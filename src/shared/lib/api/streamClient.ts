@@ -7,7 +7,7 @@ import { CONFIG } from '@/shared/config/environment';
  */
 export const streamClient = async (
   url: string,
-  options: RequestInit & { token?: string | null }
+  options: RequestInit & { token?: string | null },
 ) => {
   const headers = new Headers(options.headers || {});
 
@@ -16,9 +16,7 @@ export const streamClient = async (
   }
 
   // CONFIG.API_BASE_URL을 baseURL로 사용
-  const fullUrl = url.startsWith('http')
-    ? url
-    : `${CONFIG.API_BASE_URL}${url}`;
+  const fullUrl = url.startsWith('http') ? url : `${CONFIG.API_BASE_URL}${url}`;
 
   return fetch(fullUrl, {
     ...options,

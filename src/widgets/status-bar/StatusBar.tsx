@@ -1,5 +1,7 @@
-import { useAuthStore } from '@/entities/auth';
 import { useHealthCheck } from '@/features/chat';
+
+import { useAuthStore } from '@/entities/auth';
+
 import * as styles from './StatusBar.css';
 
 export const StatusBar = () => {
@@ -35,13 +37,8 @@ export const StatusBar = () => {
 
         {/* 사용자 섹션 */}
         <div className={styles.userSection}>
-          <span className={styles.email}>
-            {user?.user_metadata?.email || user?.id || 'User'}
-          </span>
-          <button
-            onClick={handleLogout}
-            className={styles.logoutButton}
-          >
+          <span className={styles.email}>{user?.user_metadata?.email || user?.id || 'User'}</span>
+          <button onClick={handleLogout} className={styles.logoutButton}>
             로그아웃
           </button>
         </div>

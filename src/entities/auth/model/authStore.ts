@@ -1,14 +1,16 @@
 import { create } from 'zustand';
+
 import { supabase } from '@/shared/lib/supabase';
+
 import type { AuthState, User } from './types';
 
 export const useAuthStore = create<
   AuthState & {
-  loginWithMicrosoft: () => Promise<void>;
-  checkSession: () => Promise<void>;
-  logout: () => Promise<void>;
-  getToken: () => string | null;
-}
+    loginWithMicrosoft: () => Promise<void>;
+    checkSession: () => Promise<void>;
+    logout: () => Promise<void>;
+    getToken: () => string | null;
+  }
 >((set, get) => ({
   user: null,
   token: null,
@@ -40,7 +42,6 @@ export const useAuthStore = create<
       });
     }
   },
-
 
   checkSession: async () => {
     try {

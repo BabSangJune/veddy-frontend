@@ -1,11 +1,15 @@
 import { StrictMode } from 'react';
+
 import { createRoot } from 'react-dom/client';
-import { QueryProvider } from './providers/QueryProvider';
-import App from './App.tsx';
+
 import { supabase } from '@/shared/lib/supabase';
+
+import App from './App.tsx';
+import { ApiProvider } from './providers/ApiProvider';
+import { QueryProvider } from './providers/QueryProvider';
 import '@/shared/config/styles/global.css.ts';
 
-// 🆕 Supabase Auth 변경 리스너
+// Supabase Auth 변경 리스너
 supabase.auth.onAuthStateChange((event, session) => {
   console.log('[AUTH] Event:', event, 'Session:', session);
 
@@ -19,7 +23,9 @@ supabase.auth.onAuthStateChange((event, session) => {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryProvider>
-      <App />
+      <ApiProvider>
+        <App />
+      </ApiProvider>
     </QueryProvider>
   </StrictMode>,
 );
