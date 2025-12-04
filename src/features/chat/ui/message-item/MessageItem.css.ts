@@ -61,7 +61,6 @@ export const content = style({
 });
 
 // ===== ✅ 마크다운 요소별 스타일 =====
-
 // 단락
 export const paragraph = style({
   margin: 0,
@@ -80,7 +79,8 @@ export const heading1 = style({
   fontWeight: 700,
   margin: 0,
   marginBottom: spacing[12],
-  color: colors.neutral[900],
+  marginTop: spacing[16], // 상단 여백도 추가
+  color: colors.veddy.assistantText, // 또는 현재 버블 색상 상속
 });
 
 export const heading2 = style({
@@ -89,7 +89,7 @@ export const heading2 = style({
   margin: 0,
   marginBottom: spacing[10],
   marginTop: spacing[12],
-  color: colors.neutral[900],
+  color: colors.veddy.assistantText,
 });
 
 export const heading3 = style({
@@ -98,9 +98,8 @@ export const heading3 = style({
   margin: 0,
   marginBottom: spacing[8],
   marginTop: spacing[10],
-  color: colors.neutral[800],
+  color: colors.veddy.assistantText,
 });
-
 // 강조 (Bold)
 export const strong = style({
   fontWeight: 700,
@@ -126,54 +125,57 @@ export const inlineCode = style({
 export const codeBlock = style({
   display: 'block',
   padding: spacing[12],
-  backgroundColor: colors.neutral[900],
+  backgroundColor: colors.neutral[50], // 밝은 배경
   borderRadius: borderRadius.md,
   fontFamily: 'monospace',
   fontSize: '0.875rem',
-  color: colors.neutral[100],
+  color: colors.neutral[800], // 어두운 텍스트
   overflow: 'auto',
   marginBottom: spacing[8],
+  border: `1px solid ${colors.neutral[200]}`,
 });
 
 // 링크
 export const link = style({
   color: colors.primary[500],
   textDecoration: 'underline',
-  wordBreak: 'break-all',
+  wordBreak: 'break-word', // 단어 경계에서만 끊김
+  overflowWrap: 'break-word', // 긴 URL도 처리
+  hyphens: 'auto', // 하이픈 자동 삽입
 
   selectors: {
     '&:hover': {
       color: colors.primary[700],
-      opacity: 0.8,
+      textDecoration: 'none', // 또는 opacity 대신 밑줄 제거
     },
   },
 });
 
 // 리스트
-export const list = style({
+const baseListStyle = {
   paddingLeft: spacing[24],
   marginBottom: spacing[8],
-
+  marginTop: spacing[8], // 추가: 위 여백도 통일
   selectors: {
-    '&:last-child': {
-      marginBottom: 0,
-    },
+    '&:last-child': { marginBottom: 0 },
   },
+};
+
+export const list = style({
+  ...baseListStyle,
+  listStyleType: 'disc',
+  listStylePosition: 'outside',
 });
 
 export const orderedList = style({
-  paddingLeft: spacing[24],
-  marginBottom: spacing[8],
-
-  selectors: {
-    '&:last-child': {
-      marginBottom: 0,
-    },
-  },
+  ...baseListStyle,
+  listStyleType: 'decimal',
+  listStylePosition: 'outside',
 });
 
 export const listItem = style({
   marginBottom: spacing[4],
+  display: 'list-item',
 
   selectors: {
     '&:last-child': {
@@ -191,14 +193,20 @@ export const divider = style({
 
 // 인용
 export const blockquote = style({
-  paddingLeft: spacing[12],
+  paddingLeft: spacing[16],
+  paddingRight: spacing[12],
+  paddingTop: spacing[8],
+  paddingBottom: spacing[8],
   borderLeftWidth: '0.4rem',
   borderLeftColor: colors.primary[500],
   borderLeftStyle: 'solid',
   marginLeft: 0,
   marginRight: 0,
-  marginBottom: spacing[8],
-  color: colors.neutral[600],
+  marginBottom: spacing[12],
+  marginTop: spacing[12],
+  backgroundColor: colors.neutral[50], // 배경 추가
+  borderRadius: borderRadius.sm,
+  color: colors.neutral[700],
   fontStyle: 'italic',
 });
 
@@ -273,51 +281,59 @@ export const sourceLink = style({
 // 🆕 표 스타일
 export const tableWrapper = style({
   overflowX: 'auto',
-  marginTop: '12px',
-  marginBottom: '12px',
-  borderRadius: '8px',
-  border: '1px solid #e5e7eb',
+  marginTop: spacing[12],
+  marginBottom: spacing[12],
+  borderRadius: borderRadius.md,
+  border: `1px solid ${colors.neutral[200]}`,
 });
 
 export const table = style({
   width: '100%',
   borderCollapse: 'collapse',
-  fontSize: '14px',
-  backgroundColor: '#fff',
+  fontSize: fontSize.sm,
+  backgroundColor: 'transparent',
 });
 
 export const tableHead = style({
-  backgroundColor: '#f9fafb',
-  borderBottom: '2px solid #e5e7eb',
-});
-
-export const tableBody = style({
-  backgroundColor: '#fff',
-});
-
-export const tableRow = style({
-  borderBottom: '1px solid #e5e7eb',
-  ':last-child': {
-    borderBottom: 'none',
-  },
+  backgroundColor: colors.neutral[100],
+  borderBottom: `2px solid ${colors.neutral[300]}`,
 });
 
 export const tableHeader = style({
-  padding: '12px 16px',
+  padding: `${spacing[12]} ${spacing[16]}`,
   textAlign: 'left',
   fontWeight: 600,
-  color: '#111827',
-  borderRight: '1px solid #e5e7eb',
-  ':last-child': {
-    borderRight: 'none',
+  color: colors.neutral[900],
+  borderRight: `1px solid ${colors.neutral[200]}`,
+
+  selectors: {
+    '&:last-child': {
+      borderRight: 'none',
+    },
   },
 });
 
 export const tableCell = style({
-  padding: '12px 16px',
-  color: '#374151',
-  borderRight: '1px solid #e5e7eb',
-  ':last-child': {
-    borderRight: 'none',
+  padding: `${spacing[12]} ${spacing[16]}`,
+  color: colors.neutral[700],
+  borderRight: `1px solid ${colors.neutral[200]}`,
+
+  selectors: {
+    '&:last-child': {
+      borderRight: 'none',
+    },
+  },
+});
+
+export const tableRow = style({
+  borderBottom: `1px solid ${colors.neutral[200]}`,
+
+  selectors: {
+    '&:last-child': {
+      borderBottom: 'none',
+    },
+    '&:hover': {
+      backgroundColor: colors.neutral[50], // 호버 효과
+    },
   },
 });

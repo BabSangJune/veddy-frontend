@@ -32,13 +32,12 @@ export const useChatStream = () => {
 
         let fullContent = '';
 
-        // ✅ 실제 user_id 가져오기
         const currentUser = useAuthStore.getState().user;
         const userId = currentUser?.id || currentUser?.email || 'anonymous';
 
         await streamChat(
           {
-            user_id: userId, // ✅ 실제 user_id 사용
+            user_id: userId,
             query: question,
             table_mode: tableMode,
           },
