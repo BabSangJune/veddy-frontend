@@ -294,11 +294,6 @@ export const table = style({
   backgroundColor: 'transparent',
 });
 
-export const tableHead = style({
-  backgroundColor: colors.neutral[100],
-  borderBottom: `2px solid ${colors.neutral[300]}`,
-});
-
 export const tableHeader = style({
   padding: `${spacing[12]} ${spacing[16]}`,
   textAlign: 'left',
@@ -311,6 +306,10 @@ export const tableHeader = style({
       borderRight: 'none',
     },
   },
+});
+
+export const tableBody = style({
+  backgroundColor: 'transparent',
 });
 
 export const tableCell = style({

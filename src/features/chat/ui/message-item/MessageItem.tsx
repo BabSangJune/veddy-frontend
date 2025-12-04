@@ -83,7 +83,9 @@ export const MessageItem = memo(
                       <table className={styles.table} {...props} />
                     </div>
                   ),
-                  thead: ({ node, ...props }) => <thead className={styles.tableHead} {...props} />,
+                  thead: ({ node, ...props }) => (
+                    <thead className={styles.tableHeader} {...props} />
+                  ),
                   tbody: ({ node, ...props }) => <tbody className={styles.tableBody} {...props} />,
                   tr: ({ node, ...props }) => <tr className={styles.tableRow} {...props} />,
                   th: ({ node, ...props }) => <th className={styles.tableHeader} {...props} />,
