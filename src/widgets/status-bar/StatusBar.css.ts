@@ -95,3 +95,33 @@ export const logoutButton = style({
     opacity: 0.6,
   },
 });
+
+export const wakeUpButton = style({
+  padding: `${spacing[6]} ${spacing[12]}`,
+  marginLeft: spacing[12],
+  backgroundColor: colors.success,
+  color: colors.neutral[0],
+  border: 'none',
+  borderRadius: '0.4rem',
+  fontSize: fontSize.xs,
+  fontWeight: 500,
+  cursor: 'pointer',
+  transition: 'all 0.2s ease-in-out',
+  whiteSpace: 'nowrap',
+
+  ':hover': {
+    opacity: 0.9,
+    transform: 'scale(1.03)',
+  },
+
+  ':active': {
+    opacity: 0.8,
+    transform: 'scale(0.98)',
+  },
+
+  ':disabled': {
+    opacity: 0.6,
+    cursor: 'not-allowed',
+    transform: 'none',
+  },
+});

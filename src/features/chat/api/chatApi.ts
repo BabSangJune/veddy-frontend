@@ -129,3 +129,48 @@ export const healthCheck = async (): Promise<{
 
   return response.json();
 };
+
+/**
+ * 컨테이너 깨우기
+ */
+export const wakeUpContainer = async (): Promise<{
+  status: string;
+  message: string;
+  estimated_time_seconds?: number;
+}> => {
+  const token = useAuthStore.getState().getToken();
+
+  const response = await streamClient('/container/wake-up', {
+    method: 'POST',
+    token: token ?? undefined,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to wake up container');
+  }
+
+  return response.json();
+};
+
+/**
+ * 컨테이너 상태 조회
+ */
+export const getContainerStatus = async (): Promise<{
+  status: string;
+  azure_status?: Record<string, any>;
+  timestamp: string;
+  provider: string;
+}> => {
+  const token = useAuthStore.getState().getToken();
+
+  const response = await streamClient('/container/status', {
+    method: 'GET',
+    token: token ?? undefined,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to get container status');
+  }
+
+  return response.json();
+};
