@@ -279,6 +279,7 @@ npm run format:check
 - 임포트: `import * as styles from './Component.css';`
 - 사용: `className={styles.myClass}`
 - 컴포넌트와 같은 디렉토리에 배치
+- shared / config / styles 내 토큰 참고
 
 ### 주석
 

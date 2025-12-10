@@ -1,6 +1,13 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 
-import { colors, spacing, fontSize } from '@/shared/config/styles';
+import {
+  colors,
+  spacing,
+  fontSize,
+  borderRadius,
+  fontWeight,
+  transition,
+} from '@/shared/config/styles';
 
 export const container = style({
   display: 'flex',
@@ -123,5 +130,24 @@ export const wakeUpButton = style({
     opacity: 0.6,
     cursor: 'not-allowed',
     transform: 'none',
+  },
+});
+
+export const adminButton = style({
+  padding: `${spacing[8]} ${spacing[12]}`,
+  backgroundColor: colors.primary[500],
+  color: colors.veddy.userText,
+  border: 'none',
+  borderRadius: borderRadius.base,
+  fontSize: fontSize.sm,
+  fontWeight: fontWeight.semibold,
+  cursor: 'pointer',
+  transition: `all ${transition.normal}`,
+  marginRight: spacing[12],
+  ':hover': {
+    backgroundColor: colors.primary[600],
+  },
+  ':active': {
+    backgroundColor: colors.primary[700],
   },
 });

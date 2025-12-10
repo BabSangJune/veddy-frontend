@@ -50,10 +50,26 @@ export const useAuthStore = create<
       } = await supabase.auth.getSession();
 
       if (session?.user) {
+        // ✨ public.users에서 role 가져오기
+        let role: string = 'user';
+
+        try {
+          const { data: userRow } = await supabase
+            .from('users')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+
+          if (userRow?.role) {
+            role = userRow.role;
+          }
+        } catch (e) {
+          console.warn('[checkSession] users 조회 실패:', e);
+        }
+
         const authUser: User = {
-          id: session.user.id,
-          email: session.user.email || '',
-          user_metadata: session.user.user_metadata,
+          ...session.user,
+          role, // ✨ role 추가
         };
 
         set({

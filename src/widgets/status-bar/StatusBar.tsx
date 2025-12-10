@@ -1,3 +1,7 @@
+// src/widgets/status-bar/StatusBar.tsx
+
+import { useNavigate } from 'react-router-dom'; // ✨ 추가
+
 import { useHealthCheck } from '@/features/chat';
 import { useWakeUpContainer } from '@/features/chat/model/hooks';
 
@@ -6,6 +10,7 @@ import { useAuthStore } from '@/entities/auth';
 import * as styles from './StatusBar.css';
 
 export const StatusBar = () => {
+  const navigate = useNavigate(); // ✨ 추가
   const { data: healthData, isLoading, isError } = useHealthCheck();
   const { containerStatus, isWakingUp, handleWakeUp, error: wakeUpError } = useWakeUpContainer();
   const { user, logout } = useAuthStore();
@@ -51,6 +56,10 @@ export const StatusBar = () => {
     await logout();
   };
 
+  const handleGoAdmin = () => {
+    navigate('/admin');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -71,6 +80,17 @@ export const StatusBar = () => {
         </div>
 
         <div className={styles.userSection}>
+          {/* ✨ Admin 버튼 - admin일 때만 노출 */}
+          {user?.role === 'admin' && (
+            <button
+              onClick={handleGoAdmin}
+              className={styles.adminButton}
+              title="관리자 페이지로 이동"
+            >
+              📋 관리자
+            </button>
+          )}
+
           <span className={styles.email}>{user?.user_metadata?.email || user?.id || 'User'}</span>
           <button onClick={handleLogout} className={styles.logoutButton}>
             로그아웃

@@ -1,6 +1,11 @@
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 
-export type User = Partial<SupabaseUser>; // 🆕 Partial로 변경
+// ✨ AppUser: SupabaseUser + role
+export type AppUser = Partial<SupabaseUser> & {
+  role?: 'admin' | 'user' | string;
+};
+
+export type User = AppUser;
 
 export interface AuthState {
   user: User | null;
