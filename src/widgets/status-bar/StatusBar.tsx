@@ -16,10 +16,10 @@ export const StatusBar = () => {
 
   if (isWakingUp) {
     status = 'warning';
-    statusMessage = '⏳ 컨테이너 시작 중... (약 30초)';
+    statusMessage = '⏳ 컨테이너 시작 중... (약 2~3분)';
   } else if (containerStatus === 'warming-up') {
     status = 'warning';
-    statusMessage = '⏳ 컨테이너 시작 중... (약 30초)';
+    statusMessage = '⏳ 컨테이너 시작 중... (약 2~3분)';
   } else if (wakeUpError) {
     status = 'error';
     statusMessage = '❌ 컨테이너 시작 실패';
