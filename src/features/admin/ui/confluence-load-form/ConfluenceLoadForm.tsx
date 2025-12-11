@@ -1,10 +1,13 @@
-// src/features/admin/ui/confluence-load-form/ConfluenceLoadForm.tsx
-
 import { useConfluenceStore } from '@/features/admin/model';
+import { SaveCredentialsRequest } from '@/features/admin/model';
 
 import * as styles from './ConfluenceLoadForm.css.ts';
 
-export const ConfluenceLoadForm = () => {
+interface ConfluenceLoadFormProps {
+  onSuccess?: (credentials: SaveCredentialsRequest) => void;
+}
+
+export const ConfluenceLoadForm = ({ onSuccess }: ConfluenceLoadFormProps) => {
   const {
     spaceKey,
     atlassianId,
@@ -18,6 +21,19 @@ export const ConfluenceLoadForm = () => {
     loadConfluenceData,
     clearForm,
   } = useConfluenceStore();
+
+  const handleLoadClick = async () => {
+    await loadConfluenceData();
+
+    // ✅ SSE 진행률 표시용 credentials 전달
+    if (onSuccess) {
+      onSuccess({
+        space_key: spaceKey,
+        atlassian_id: atlassianId,
+        api_token: apiToken,
+      });
+    }
+  };
 
   return (
     <section className={styles.section}>
@@ -81,7 +97,7 @@ export const ConfluenceLoadForm = () => {
       </div>
 
       <div className={styles.buttonGroup}>
-        <button onClick={loadConfluenceData} disabled={isLoading} className={styles.buttonPrimary}>
+        <button onClick={handleLoadClick} disabled={isLoading} className={styles.buttonPrimary}>
           {isLoading ? '⏳ 로드 중...' : '🚀 데이터 로드'}
         </button>
         <button onClick={clearForm} disabled={isLoading} className={styles.buttonSecondary}>

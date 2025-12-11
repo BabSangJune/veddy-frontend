@@ -1,6 +1,8 @@
 import { axiosClient } from '@/shared/lib/api';
 import { streamClient } from '@/shared/lib/api/streamClient';
-import { ConfluenceProgressEvent, SaveCredentialsRequest } from '../model';
+
+import type { ConfluenceProgressEvent } from '../model/types';
+import { SaveCredentialsRequest } from '../model/types';
 
 /**
  * Confluence 데이터 로드 요청 타입
@@ -56,7 +58,7 @@ export const loadConfluenceData = async (
 
 /**
  * ✨ SSE: Confluence 데이터 로드 (실시간 진행 상황)
- * 
+ *
  * streamClient를 사용하여 토큰 자동 추가
  *
  * @param request - 자격증명 요청
@@ -78,16 +80,20 @@ export const loadConfluenceDataWithSSE = (
       api_token: request.api_token,
     });
 
-    // ✅ streamClient 사용 (토큰 자동 추가)
+    // ✅ 토큰을 헤더에 추가하여 streamClient 호출
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     streamClient(`/admin/confluence/load-stream?${params.toString()}`, {
-      token,
+      headers, // ← 토큰을 헤더에 추가
     })
       .then(async (response) => {
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        // ✅ ReadableStream으로 SSE 처리
         const reader = response.body?.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
@@ -104,7 +110,6 @@ export const loadConfluenceDataWithSSE = (
 
           buffer += decoder.decode(value, { stream: true });
 
-          // ✅ 개별 메시지 파싱 (\n\n으로 구분)
           const lines = buffer.split('\n\n');
           buffer = lines[lines.length - 1];
 
@@ -112,11 +117,10 @@ export const loadConfluenceDataWithSSE = (
             const line = lines[i].trim();
             if (line.startsWith('data: ')) {
               try {
-                const jsonStr = line.slice(6); // 'data: ' 제거
+                const jsonStr = line.slice(6);
                 const data: ConfluenceProgressEvent = JSON.parse(jsonStr);
                 onProgress(data);
 
-                // 완료 또는 에러 시 루프 종료
                 if (data.status === 'completed' || data.status === 'error') {
                   return;
                 }
@@ -133,10 +137,8 @@ export const loadConfluenceDataWithSSE = (
         onError(error.message || '서버 연결이 끊어졌습니다');
       });
 
-    // ✅ 정리 함수 반환 (필요시 연결 중단)
     return () => {
       // Fetch의 경우 AbortController를 사용해야 함
-      // 하지만 이미 시작된 stream은 읽기만 중단
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류';
