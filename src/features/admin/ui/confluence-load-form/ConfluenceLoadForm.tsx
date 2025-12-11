@@ -128,6 +128,9 @@ export const ConfluenceLoadForm = ({ onSuccess }: ConfluenceLoadFormProps) => {
               <span className={styles.alertListItemStrong}>성공:</span> {loadResult.success_count}개
             </li>
             <li className={styles.alertListItem}>
+              <span className={styles.alertListItemStrong}>스킵:</span> {loadResult.skip_count}개
+            </li>
+            <li className={styles.alertListItem}>
               <span className={styles.alertListItemStrong}>실패:</span> {loadResult.error_count}개
             </li>
             <li className={styles.alertListItem}>

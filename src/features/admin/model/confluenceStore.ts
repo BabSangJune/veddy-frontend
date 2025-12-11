@@ -106,11 +106,12 @@ export const useConfluenceStore = create<ConfluenceState>((set, get) => ({
               loadResult: {
                 status: 'completed',
                 space_key: spaceKey,
-                total_pages: event.total_pages ?? 0,
-                success_count: event.success_count ?? 0,
-                error_count: event.error_count ?? 0,
-                total_chunks: event.total_chunks ?? 0,
-                message: event.message ?? '로드 완료',
+                total_pages: event.total_pages || 0,
+                success_count: event.success_count || 0,
+                error_count: event.error_count || 0,
+                skip_count: event.skip_count || 0, // ← 추가!
+                total_chunks: event.total_chunks || 0,
+                message: event.message || '로드 완료',
               },
               isLoading: false,
               currentProgress: 100,

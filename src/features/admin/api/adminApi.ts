@@ -22,6 +22,7 @@ export interface LoadConfluenceResponse {
   total_pages: number;
   success_count: number;
   error_count: number;
+  skip_count: number;
   total_chunks: number;
   message: string;
 }
