@@ -11,7 +11,6 @@ export interface ChatRequest {
   table_mode?: boolean;
 }
 
-// ✅ API_BASE_URL 제거 (streamClient가 이미 처리)
 export const streamChat = async (
   request: ChatRequest,
   onToken: (token: string) => void,
@@ -20,7 +19,6 @@ export const streamChat = async (
 ): Promise<void> => {
   const token = useAuthStore.getState().getToken();
 
-  // ✅ 간단히 '/chat/stream' 경로만 전달 (streamClient가 baseURL 붙임)
   const endpoint = '/chat/stream';
 
   console.log('[streamChat] 요청:', endpoint, {
@@ -29,6 +27,13 @@ export const streamChat = async (
   });
 
   try {
+    // 🔥 타임아웃 컨트롤러 추가 (5분 = 300,000ms)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      300000, // 🔥 30초 → 5분 (300,000ms)
+    );
+
     const response = await streamClient(endpoint, {
       method: 'POST',
       headers: {
@@ -36,7 +41,10 @@ export const streamChat = async (
       },
       body: JSON.stringify(request),
       token: token ?? undefined,
+      signal: controller.signal, // 🔥 타임아웃 신호 추가
     });
+
+    clearTimeout(timeoutId); // 🔥 성공 시 타임아웃 해제
 
     console.log('[streamChat] 응답 상태:', response.status);
 
@@ -107,7 +115,12 @@ export const streamChat = async (
     }
   } catch (error) {
     console.error('[streamChat] 에러:', error);
-    onError(error instanceof Error ? error : new Error('Unknown error'));
+    // 🔥 타임아웃 에러 처리
+    if (error instanceof Error && error.name === 'AbortError') {
+      onError(new Error('요청 시간이 초과되었습니다. (5분) 잠시 후 다시 시도해주세요.'));
+    } else {
+      onError(error instanceof Error ? error : new Error('Unknown error'));
+    }
   }
 };
 
